@@ -15,8 +15,7 @@ const StoreCard = ({ store, isSelected, onClick }) => {
         {store.rua}, {store.numero}
       </p>
       <div className={styles.storeLocation}>
-        <span>{store.bairro}</span>
-        <span>,</span>
+        <span>{store.bairro},</span>
         <span>{store.cidade}</span>
         <span>-</span>
         <span>{store.estado}</span>

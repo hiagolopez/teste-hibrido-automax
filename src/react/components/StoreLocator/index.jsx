@@ -18,25 +18,34 @@ const StoreLocator = () => {
   });
 
   const filteredStores = useMemo(() => {
-    if (userLocation && allStores.length > 0) {
+    if (userLocation && allStores.length > 0 && !selectedState && !selectedCity) {
       return findNearestStores(allStores, userLocation.latitude, userLocation.longitude);
     }
     return allStores;
-  }, [allStores, userLocation]);
+  }, [allStores, userLocation, selectedState, selectedCity]);
 
   const { states, loading: statesLoading } = useStoreStates();
   const { cities, loading: citiesLoading } = useStoreCities(selectedState);
 
   const handleStateChange = useCallback((e) => {
+    const scrollPosition = window.scrollY;
     setSelectedState(e.target.value);
     setSelectedCity('');
     setSelectedStore(null);
     setUserLocation(null);
+    setTimeout(() => {
+      window.scrollTo(0, scrollPosition);
+    }, 0);
   }, []);
 
   const handleCityChange = useCallback((e) => {
+    const scrollPosition = window.scrollY;
     setSelectedCity(e.target.value);
     setSelectedStore(null);
+    setUserLocation(null);
+    setTimeout(() => {
+      window.scrollTo(0, scrollPosition);
+    }, 0);
   }, []);
 
   const handleStoreClick = useCallback((store) => {
@@ -50,10 +59,15 @@ const StoreLocator = () => {
   }, []);
 
   useEffect(() => {
-    if (userLocation && filteredStores.length > 0 && filteredStores[0]?.distance !== undefined) {
+    if (userLocation && !selectedState && !selectedCity && filteredStores.length > 0 && filteredStores[0]?.distance !== undefined) {
       setSelectedStore(filteredStores[0]);
+    } else if (!userLocation && filteredStores.length > 0 && (selectedState || selectedCity)) {
+      const isSelectedStoreInFiltered = selectedStore && filteredStores.some(store => store.id === selectedStore.id);
+      if (!isSelectedStoreInFiltered) {
+        setSelectedStore(filteredStores[0]);
+      }
     }
-  }, [userLocation, filteredStores]);
+  }, [userLocation, selectedState, selectedCity, filteredStores, selectedStore]);
 
   const handleLocationClear = useCallback(() => {
     setUserLocation(null);
@@ -78,7 +92,7 @@ const StoreLocator = () => {
             value={selectedState}
             onChange={handleStateChange}
             className={styles.select}
-            disabled={statesLoading || !!userLocation}
+            disabled={statesLoading}
           >
             <option value="">Todos os estados</option>
             {states.map(state => (
@@ -97,7 +111,7 @@ const StoreLocator = () => {
               value={selectedCity}
               onChange={handleCityChange}
               className={styles.select}
-              disabled={citiesLoading || !!userLocation}
+              disabled={citiesLoading}
             >
               <option value="">Todas as cidades</option>
               {cities.map(city => (
@@ -110,16 +124,20 @@ const StoreLocator = () => {
         )}
       </div>
 
-      {!storesLoading && filteredStores.length > 0 && (
-        <StoreMap
-          stores={filteredStores}
-          selectedStore={selectedStore}
-          userLocation={userLocation}
-          onMarkerClick={handleStoreClick}
-        />
-      )}
+      <div className={styles.mapWrapper}>
+        {storesLoading && filteredStores.length === 0 ? (
+          <div className={styles.mapPlaceholder}>Carregando mapa...</div>
+        ) : filteredStores.length > 0 ? (
+          <StoreMap
+            stores={filteredStores}
+            selectedStore={selectedStore}
+            userLocation={userLocation}
+            onMarkerClick={handleStoreClick}
+          />
+        ) : null}
+      </div>
 
-      {storesLoading ? (
+      {storesLoading && filteredStores.length === 0 ? (
         <div className={styles.loading}>Carregando lojas...</div>
       ) : filteredStores.length === 0 ? (
         <div className={styles.emptyState}>

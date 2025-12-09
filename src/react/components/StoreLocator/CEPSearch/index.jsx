@@ -23,12 +23,16 @@ const CEPSearch = ({ onLocationFound, onLocationClear }) => {
       return;
     }
 
+    const scrollPosition = window.scrollY;
     setLoading(true);
     setError(null);
 
     try {
       const location = await geocodeCEP(cleanCEP);
       onLocationFound(location);
+      setTimeout(() => {
+        window.scrollTo(0, scrollPosition);
+      }, 0);
     } catch (err) {
       setError(err.message || 'Erro ao buscar CEP. Verifique se a chave da API está configurada.');
       onLocationClear();
