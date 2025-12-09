@@ -1,0 +1,88 @@
+.cepSearch {
+  margin-top: 24px;
+}
+
+.cepInputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+  }
+}
+
+.cepInputWrapper {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.cepInput {
+  flex: 1;
+  padding: 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+
+  &:hover {
+    border-color: #007bff;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+  }
+
+  &:disabled {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+  }
+}
+
+.searchButton {
+  padding: 12px 24px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover:not(:disabled) {
+    background-color: #0056b3;
+  }
+
+  &:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+}
+
+.clearButton {
+  padding: 8px 12px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #666;
+  cursor: pointer;
+  line-height: 1;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: #333;
+  }
+}
+
+.errorMessage {
+  color: #dc3545;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
