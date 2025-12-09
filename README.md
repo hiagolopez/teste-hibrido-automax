@@ -15,13 +15,22 @@ Acesse `/nossas-lojas` para visualizar a página de lojas.
 
 - Listagem de lojas
 - Filtros por estado e cidade
+- Busca por CEP (encontra a loja mais próxima)
 - Mapa interativo com pins das lojas
-- Visualização de detalhes da loja (telefone, horário, endereço)
+- Visualização de detalhes da loja (telefone, horário, endereço, distância)
 - Dados mockados em JSON (simula dados do Master Data ou dados cadastrados no Site Editor)
 
 ## Tecnologias
 
-React, React Router, SASS, Google Maps API
+- React, React Router
+- SASS (CSS Modules)
+- Google Maps JavaScript API
+- ViaCEP API (geocodificação)
+- Nominatim/OpenStreetMap API (geocodificação)
+
+## Documentação
+
+Para mais detalhes sobre a arquitetura, decisões técnicas e estimativas, consulte o arquivo [ARQUITETURA_E_ESTIMATIVA.md](./ARQUITETURA_E_ESTIMATIVA.md).
 
 ## Google Maps
 

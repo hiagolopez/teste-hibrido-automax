@@ -18,6 +18,17 @@ Campos necessários:
 
 A interface nativa do Master Data atende aos requisitos. A configuração das tabelas e campos no Master Data é simples e rápida, estimada em aproximadamente 2 horas. Como alternativa, o cadastro via Site Editor também pode ser utilizado, oferecendo uma interface visual para gerenciamento das lojas.
 
+### APIs
+
+**APIs VTEX:**
+- **Master Data API V2**: Para buscar, criar, atualizar e deletar registros de lojas. Utilizada através dos resolvers GraphQL no backend.
+- **GraphQL API**: Para expor queries customizadas ao frontend, permitindo filtros por estado, cidade e listagem de estados/cidades disponíveis.
+
+**APIs de Terceiros:**
+- **Google Maps JavaScript API**: Para renderização do mapa interativo com pins das lojas. Requer chave de API configurada no ambiente.
+- **ViaCEP API** (funcionalidade opcional): API gratuita para busca de endereços a partir de CEP, utilizada na funcionalidade de busca por CEP.
+- **Nominatim/OpenStreetMap API** (funcionalidade opcional): API gratuita para geocodificação reversa (conversão de endereço em coordenadas latitude/longitude), utilizada na funcionalidade de busca por CEP.
+
 ### Frontend
 
 Será criada uma página customizada utilizando `store.custom` na rota `/nossas-lojas`. O componente React realizará a busca dos dados através de GraphQL.
