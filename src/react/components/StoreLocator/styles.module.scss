@@ -71,7 +71,12 @@
     list-style: none;
     padding: 0;
     margin: 0;
+    width: 100%;
   }
+}
+
+.storesListItem {
+  display: flex;
 }
 
 .emptyState {
@@ -104,6 +109,9 @@
   .storesList {
     flex-direction: row;
     flex-wrap: wrap;
-    align-items: flex-start;
+
+    li {
+      width: calc((100% - 32px) / 3);
+    }
   }
 }

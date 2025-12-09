@@ -1,6 +1,6 @@
 .header {
   width: 100%;
-  padding: 16px 24px;
+  padding: 12px 24px;
   background: #000;
   border-bottom: 1px solid #333;
 }
@@ -17,18 +17,16 @@
 }
 
 .logoAuto {
+  line-height: 100%;
   color: #007bff;
 }
 
 .logoMax {
+  line-height: 100%;
   color: #0056b3;
 }
 
 @media (min-width: 768px) {
-  .header {
-    padding: 20px 40px;
-  }
-
   .logo {
     font-size: 36px;
   }

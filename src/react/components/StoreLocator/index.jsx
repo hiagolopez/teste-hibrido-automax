@@ -129,7 +129,7 @@ const StoreLocator = () => {
       ) : (
         <ul className={styles.storesList}>
           {filteredStores.map(store => (
-            <li key={store.id}>
+            <li key={store.id} className={styles.storesListItem}>
               <StoreCard
                 store={store}
                 isSelected={selectedStore?.id === store.id}
