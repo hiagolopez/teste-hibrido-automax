@@ -1,4 +1,4 @@
-import storesData from '../data/stores.json';
+import storesData from '../../data/stores.json';
 
 // Simulação de query dos dados do Master Data ou dados cadastrados no Site Editor
 const simulateMasterDataQuery = (filters = {}) => {

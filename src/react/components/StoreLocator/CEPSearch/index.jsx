@@ -1,9 +1,9 @@
 import React, { useState, useCallback } from 'react';
-import { geocodeCEP } from '../../../../services/geocodingService';
-import { validateCEP, formatCEP } from '../../../../utils/validateCEP';
+import { geocodeCEP } from '../../../services/geocodingService';
+import { validateCEP, formatCEP } from '../../../utils/validateCEP';
 import styles from './styles.module.scss';
 
-const CEPSearch = ({ onLocationFound, onLocationClear }) => {
+const CEPSearch = ({ onLocationFound, onLocationClear, onBeforeSearch }) => {
   const [searchCEP, setSearchCEP] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -27,6 +27,10 @@ const CEPSearch = ({ onLocationFound, onLocationClear }) => {
     setLoading(true);
     setError(null);
 
+    if (onBeforeSearch) {
+      onBeforeSearch();
+    }
+
     try {
       const location = await geocodeCEP(cleanCEP);
       onLocationFound(location);
@@ -39,7 +43,7 @@ const CEPSearch = ({ onLocationFound, onLocationClear }) => {
     } finally {
       setLoading(false);
     }
-  }, [searchCEP, onLocationFound, onLocationClear]);
+  }, [searchCEP, onLocationFound, onLocationClear, onBeforeSearch]);
 
   const handleClear = useCallback(() => {
     setSearchCEP('');

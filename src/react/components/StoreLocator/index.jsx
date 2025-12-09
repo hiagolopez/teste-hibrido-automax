@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { useStores, useStoreStates, useStoreCities } from '../../hooks/useStores';
-import { findNearestStores } from '../../../services/geocodingService';
+import { findNearestStores } from '../../services/geocodingService';
 import styles from './styles.module.scss';
 import StoreCard from './StoreCard';
 import StoreMap from './StoreMap';
@@ -64,7 +64,13 @@ const StoreLocator = () => {
   }, [selectedStore]);
 
   const handleLocationFound = useCallback((location) => {
+    setSelectedState('');
+    setSelectedCity('');
+    setSelectedStore(null);
     setUserLocation(location);
+  }, []);
+
+  const handleBeforeCEPSearch = useCallback(() => {
     setSelectedState('');
     setSelectedCity('');
     setSelectedStore(null);
@@ -101,6 +107,7 @@ const StoreLocator = () => {
       <CEPSearch
         onLocationFound={handleLocationFound}
         onLocationClear={handleLocationClear}
+        onBeforeSearch={handleBeforeCEPSearch}
       />
 
       <div className={styles.filters}>

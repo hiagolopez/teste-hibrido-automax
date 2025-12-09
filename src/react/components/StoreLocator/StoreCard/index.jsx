@@ -20,6 +20,11 @@ const StoreCard = ({ store, isSelected, onClick }) => {
         <span>-</span>
         <span>{store.estado}</span>
       </div>
+      {store.distance !== undefined && (
+        <div className={styles.storeDistance}>
+          📍 {store.distance.toFixed(1)} km de distância
+        </div>
+      )}
       <div className={styles.storeDetails}>
         <p className={styles.detailItem}>
           <strong>Telefone:</strong> {store.telefone}

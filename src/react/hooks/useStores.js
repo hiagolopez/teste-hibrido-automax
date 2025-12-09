@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { storeService } from '../../services/storeService';
+import { storeService } from '../services/storeService';
 
 export const useStores = (filters = {}) => {
   const [stores, setStores] = useState([]);
