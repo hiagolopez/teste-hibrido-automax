@@ -1,0 +1,75 @@
+.storeCard {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: white;
+  width: 100%;
+
+  &:hover {
+    border-color: #007bff;
+    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
+  }
+
+  &.selected {
+    border-color: #007bff;
+    background: #f0f8ff;
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+  }
+}
+
+.storeIcon {
+  font-size: 24px;
+  margin-bottom: 12px;
+}
+
+.storeName {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 0 0 8px 0;
+  color: #333;
+}
+
+.storeAddress {
+  font-size: 14px;
+  color: #666;
+  margin: 0 0 8px 0;
+}
+
+.storeLocation {
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  font-size: 14px;
+  color: #666;
+}
+
+.storeDetails {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.detailItem {
+  font-size: 14px;
+  color: #333;
+  margin: 8px 0;
+
+  strong {
+    color: #007bff;
+    margin-right: 8px;
+  }
+}
+
+@media (min-width: 768px) {
+  .storeCard {
+    max-width: 350px;
+    min-width: 300px;
+  }
+}
+
