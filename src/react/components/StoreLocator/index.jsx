@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo, useEffect } from 'react';
+import React, { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { useStores, useStoreStates, useStoreCities } from '../../hooks/useStores';
 import { findNearestStores } from '../../../services/geocodingService';
 import styles from './styles.module.scss';
@@ -11,6 +11,7 @@ const StoreLocator = () => {
   const [selectedCity, setSelectedCity] = useState('');
   const [selectedStore, setSelectedStore] = useState(null);
   const [userLocation, setUserLocation] = useState(null);
+  const mapWrapperRef = useRef(null);
 
   const { stores: allStores, loading: storesLoading } = useStores({
     state: selectedState || undefined,
@@ -49,18 +50,36 @@ const StoreLocator = () => {
   }, []);
 
   const handleStoreClick = useCallback((store) => {
-    setSelectedStore(store.id === selectedStore?.id ? null : store);
+    const isDeselecting = store.id === selectedStore?.id;
+    setSelectedStore(isDeselecting ? null : store);
+    
+    if (!isDeselecting && mapWrapperRef.current) {
+      setTimeout(() => {
+        mapWrapperRef.current?.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'start' 
+        });
+      }, 100);
+    }
   }, [selectedStore]);
 
   const handleLocationFound = useCallback((location) => {
     setUserLocation(location);
     setSelectedState('');
     setSelectedCity('');
+    setSelectedStore(null);
   }, []);
 
   useEffect(() => {
     if (userLocation && !selectedState && !selectedCity && filteredStores.length > 0 && filteredStores[0]?.distance !== undefined) {
-      setSelectedStore(filteredStores[0]);
+      if (!selectedStore) {
+        setSelectedStore(filteredStores[0]);
+      } else {
+        const isSelectedStoreInFiltered = filteredStores.some(store => store.id === selectedStore.id);
+        if (!isSelectedStoreInFiltered) {
+          setSelectedStore(filteredStores[0]);
+        }
+      }
     } else if (!userLocation && filteredStores.length > 0 && (selectedState || selectedCity)) {
       const isSelectedStoreInFiltered = selectedStore && filteredStores.some(store => store.id === selectedStore.id);
       if (!isSelectedStoreInFiltered) {
@@ -124,7 +143,7 @@ const StoreLocator = () => {
         )}
       </div>
 
-      <div className={styles.mapWrapper}>
+      <div ref={mapWrapperRef} className={styles.mapWrapper}>
         {storesLoading && filteredStores.length === 0 ? (
           <div className={styles.mapPlaceholder}>Carregando mapa...</div>
         ) : filteredStores.length > 0 ? (

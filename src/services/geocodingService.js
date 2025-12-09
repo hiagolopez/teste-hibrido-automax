@@ -21,7 +21,14 @@ export const geocodeCEP = async (cep) => {
       throw new Error('CEP não encontrado. Verifique se o CEP está correto.');
     }
 
-    const address = `${viaCEPData.localidade}, ${viaCEPData.uf}, Brasil`;
+    const addressParts = [];
+    if (viaCEPData.logradouro) addressParts.push(viaCEPData.logradouro);
+    if (viaCEPData.bairro) addressParts.push(viaCEPData.bairro);
+    addressParts.push(viaCEPData.localidade);
+    addressParts.push(viaCEPData.uf);
+    addressParts.push('Brasil');
+    
+    const address = addressParts.join(', ');
     
     const nominatimResponse = await fetch(
       `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}&limit=1`,

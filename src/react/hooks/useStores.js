@@ -6,9 +6,11 @@ export const useStores = (filters = {}) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const { state, city } = filters;
+
   useEffect(() => {
     setLoading(true);
-    storeService.getStores(filters)
+    storeService.getStores({ state, city })
       .then(response => {
         setStores(response.stores);
         setError(null);
@@ -18,7 +20,7 @@ export const useStores = (filters = {}) => {
         setStores([]);
       })
       .finally(() => setLoading(false));
-  }, [filters.state, filters.city]);
+  }, [state, city]);
 
   return { stores, loading, error };
 };
