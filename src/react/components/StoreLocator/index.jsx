@@ -47,11 +47,10 @@ const StoreLocator = () => {
     setUserLocation(location);
     setSelectedState('');
     setSelectedCity('');
-    setSelectedStore(null);
   }, []);
 
   useEffect(() => {
-    if (userLocation && filteredStores.length > 0 && filteredStores[0].distance !== undefined) {
+    if (userLocation && filteredStores.length > 0 && filteredStores[0]?.distance !== undefined) {
       setSelectedStore(filteredStores[0]);
     }
   }, [userLocation, filteredStores]);
@@ -115,6 +114,7 @@ const StoreLocator = () => {
         <StoreMap
           stores={filteredStores}
           selectedStore={selectedStore}
+          userLocation={userLocation}
           onMarkerClick={handleStoreClick}
         />
       )}

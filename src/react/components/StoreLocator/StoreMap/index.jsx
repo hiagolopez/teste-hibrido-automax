@@ -16,7 +16,7 @@ const defaultOptions = {
   fullscreenControl: true,
 };
 
-const StoreMap = ({ stores, selectedStore, onMarkerClick }) => {
+const StoreMap = ({ stores, selectedStore, userLocation, onMarkerClick }) => {
   const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY || '';
   const mapRef = useRef(null);
   
@@ -32,6 +32,12 @@ const StoreMap = ({ stores, selectedStore, onMarkerClick }) => {
         lng: selectedStore.longitude
       };
     }
+    if (userLocation) {
+      return {
+        lat: userLocation.latitude,
+        lng: userLocation.longitude
+      };
+    }
     if (stores.length === 0) return defaultCenter;
     if (stores.length === 1) {
       return {
@@ -42,7 +48,7 @@ const StoreMap = ({ stores, selectedStore, onMarkerClick }) => {
     const avgLat = stores.reduce((sum, store) => sum + store.latitude, 0) / stores.length;
     const avgLng = stores.reduce((sum, store) => sum + store.longitude, 0) / stores.length;
     return { lat: avgLat, lng: avgLng };
-  }, [stores, selectedStore]);
+  }, [stores, selectedStore, userLocation]);
 
   useEffect(() => {
     if (selectedStore && mapRef.current && isLoaded && window.google) {
@@ -51,8 +57,14 @@ const StoreMap = ({ stores, selectedStore, onMarkerClick }) => {
         lng: selectedStore.longitude
       });
       mapRef.current.setZoom(15);
+    } else if (userLocation && !selectedStore && mapRef.current && isLoaded && window.google) {
+      mapRef.current.panTo({
+        lat: userLocation.latitude,
+        lng: userLocation.longitude
+      });
+      mapRef.current.setZoom(12);
     }
-  }, [selectedStore, isLoaded]);
+  }, [selectedStore, userLocation, isLoaded]);
 
   if (loadError) {
     return (
@@ -70,7 +82,7 @@ const StoreMap = ({ stores, selectedStore, onMarkerClick }) => {
     );
   }
 
-  const zoom = selectedStore ? 15 : stores.length === 1 ? 15 : stores.length > 1 ? 10 : 5;
+  const zoom = selectedStore ? 15 : userLocation ? 12 : stores.length === 1 ? 15 : stores.length > 1 ? 10 : 5;
 
   return (
     <div className={styles.mapContainer}>
