@@ -4,14 +4,13 @@ import Header from './react/components/Header';
 import Footer from './react/components/Footer';
 import Home from './pages/Home';
 import StoreLocator from './react/StoreLocator';
-import styles from './App.module.scss';
 
 function App() {
   return (
     <Router>
-      <div className={styles.appContainer}>
+      <div className="appContainer">
         <Header />
-        <main className={styles.mainContent}>
+        <main className="mainContent">
           <Switch>
             <Route exact path="/" component={Home} />
             <Route exact path="/nossas-lojas" component={StoreLocator} />

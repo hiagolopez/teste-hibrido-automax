@@ -3,7 +3,7 @@ import { geocodeCEP } from '../../../services/geocodingService';
 import { validateCEP, formatCEP } from '../../../utils/validateCEP';
 import styles from './styles.module.scss';
 
-const CEPSearch = ({ onLocationFound, onLocationClear, onBeforeSearch }) => {
+const CEPSearch = ({ onLocationFound, onLocationClear }) => {
   const [searchCEP, setSearchCEP] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -27,10 +27,6 @@ const CEPSearch = ({ onLocationFound, onLocationClear, onBeforeSearch }) => {
     setLoading(true);
     setError(null);
 
-    if (onBeforeSearch) {
-      onBeforeSearch();
-    }
-
     try {
       const location = await geocodeCEP(cleanCEP);
       onLocationFound(location);
@@ -43,7 +39,7 @@ const CEPSearch = ({ onLocationFound, onLocationClear, onBeforeSearch }) => {
     } finally {
       setLoading(false);
     }
-  }, [searchCEP, onLocationFound, onLocationClear, onBeforeSearch]);
+  }, [searchCEP, onLocationFound, onLocationClear]);
 
   const handleClear = useCallback(() => {
     setSearchCEP('');

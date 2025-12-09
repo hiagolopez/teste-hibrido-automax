@@ -6,12 +6,14 @@ const simulateMasterDataQuery = (filters = {}) => {
     setTimeout(() => {
       let filtered = storesData.filter(store => store.active);
 
-      if (filters.state) {
-        filtered = filtered.filter(store => store.estado === filters.state);
-      }
+      if (!filters.ignoreFilters) {
+        if (filters.state) {
+          filtered = filtered.filter(store => store.estado === filters.state);
+        }
 
-      if (filters.city) {
-        filtered = filtered.filter(store => store.cidade === filters.city);
+        if (filters.city) {
+          filtered = filtered.filter(store => store.cidade === filters.city);
+        }
       }
 
       resolve({

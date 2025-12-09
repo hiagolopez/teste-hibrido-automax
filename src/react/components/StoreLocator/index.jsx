@@ -13,17 +13,26 @@ const StoreLocator = () => {
   const [userLocation, setUserLocation] = useState(null);
   const mapWrapperRef = useRef(null);
 
-  const { stores: allStores, loading: storesLoading } = useStores({
+  // Busca todas as lojas (sem filtros) para usar no cálculo de proximidade
+  const { stores: allStoresCache } = useStores({ ignoreFilters: true });
+  
+  // Busca lojas filtradas para exibição quando não há userLocation
+  const storeFilters = useMemo(() => ({
     state: selectedState || undefined,
-    city: selectedCity || undefined
-  });
+    city: selectedCity || undefined,
+    ignoreFilters: false
+  }), [selectedState, selectedCity]);
+
+  const { stores: filteredStoresData, loading: storesLoading } = useStores(storeFilters);
 
   const filteredStores = useMemo(() => {
-    if (userLocation && allStores.length > 0 && !selectedState && !selectedCity) {
-      return findNearestStores(allStores, userLocation.latitude, userLocation.longitude);
+    if (userLocation && allStoresCache.length > 0) {
+      // Quando há userLocation, usa todas as lojas do cache para calcular a mais próxima
+      return findNearestStores(allStoresCache, userLocation.latitude, userLocation.longitude);
     }
-    return allStores;
-  }, [allStores, userLocation, selectedState, selectedCity]);
+    // Quando não há userLocation, usa as lojas filtradas
+    return filteredStoresData;
+  }, [allStoresCache, filteredStoresData, userLocation]);
 
   const { states, loading: statesLoading } = useStoreStates();
   const { cities, loading: citiesLoading } = useStoreCities(selectedState);
@@ -64,20 +73,15 @@ const StoreLocator = () => {
   }, [selectedStore]);
 
   const handleLocationFound = useCallback((location) => {
+    // Limpa todos os filtros e define userLocation imediatamente
     setSelectedState('');
     setSelectedCity('');
     setSelectedStore(null);
     setUserLocation(location);
   }, []);
 
-  const handleBeforeCEPSearch = useCallback(() => {
-    setSelectedState('');
-    setSelectedCity('');
-    setSelectedStore(null);
-  }, []);
-
   useEffect(() => {
-    if (userLocation && !selectedState && !selectedCity && filteredStores.length > 0 && filteredStores[0]?.distance !== undefined) {
+    if (userLocation && filteredStores.length > 0 && filteredStores[0]?.distance !== undefined) {
       if (!selectedStore) {
         setSelectedStore(filteredStores[0]);
       } else {
@@ -107,7 +111,6 @@ const StoreLocator = () => {
       <CEPSearch
         onLocationFound={handleLocationFound}
         onLocationClear={handleLocationClear}
-        onBeforeSearch={handleBeforeCEPSearch}
       />
 
       <div className={styles.filters}>
